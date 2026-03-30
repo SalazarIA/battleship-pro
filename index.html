@@ -2,35 +2,44 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Battleship Pro</title>
+    <title>👑 Guerra dos Reinos AAA</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h1>⚓ Battleship Pro</h1>
-
-<div class="hud">
-    <p id="status">Seu turno</p>
+<div id="menu">
+    <h1>👑 Guerra dos Reinos</h1>
+    <button onclick="iniciarJogo()">⚔️ Iniciar Guerra</button>
 </div>
 
-<div class="container">
-    <div>
-        <h2>Seu Campo</h2>
-        <div id="playerBoard" class="tabuleiro"></div>
+<div id="game" class="hidden">
+
+    <h1>👑 Guerra dos Reinos</h1>
+
+    <div class="hud">
+        <h2 id="status">Seu turno, Majestade</h2>
+        <button onclick="toggleSom()">🔊 Som</button>
     </div>
 
-    <div>
-        <h2>Inimigo</h2>
-        <div id="enemyBoard" class="tabuleiro"></div>
+    <div class="container">
+        <div>
+            <h3>Seu Reino</h3>
+            <div id="playerBoard" class="tabuleiro"></div>
+        </div>
+
+        <div>
+            <h3>Inimigo</h3>
+            <div id="enemyBoard" class="tabuleiro"></div>
+        </div>
     </div>
-</div>
 
-<div class="log">
-    <h3>Log de Jogadas</h3>
-    <ul id="logList"></ul>
-</div>
+    <div class="log">
+        <h3>📜 Batalha</h3>
+        <ul id="logList"></ul>
+    </div>
 
-<button onclick="reiniciarJogo()">Novo Jogo</button>
+    <button onclick="reiniciarJogo()">🔄 Nova Guerra</button>
+</div>
 
 <script src="js/game.js"></script>
 <script src="js/ui.js"></script>

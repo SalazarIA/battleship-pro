@@ -1,21 +1,21 @@
-# ⚓ Battleship Pro
+# 👑 Guerra dos Reinos (Battleship Pro)
 
-Jogo de Batalha Naval desenvolvido com JavaScript puro.
+Jogo de batalha naval com temática medieval onde dois reinos disputam o domínio dos mares.
 
 ## 🚀 Funcionalidades
-- Tabuleiro 10x10
-- IA básica
+- IA jogável
 - Navios diagonais
-- Log de jogadas
-- Interface moderna
+- Sistema de turnos
+- Log de batalha
+- Interface temática
+
+## 🎮 Demo
+(cole aqui seu link da Vercel)
 
 ## 🧠 Tecnologias
 - HTML
 - CSS
 - JavaScript
-
-## ▶️ Como rodar
-Abra o index.html com Live Server.
 
 ## 👨‍💻 Autor
 Lucas Soares Silvério

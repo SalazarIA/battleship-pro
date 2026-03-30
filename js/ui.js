@@ -1,3 +1,11 @@
+function iniciarJogo() {
+    document.getElementById("menu").classList.add("hidden");
+    document.getElementById("game").classList.remove("hidden");
+
+    audioBg.play();
+    reiniciarJogo();
+}
+
 function render(board, el, esconder=false) {
     el.innerHTML = "";
 
@@ -7,7 +15,6 @@ function render(board, el, esconder=false) {
             let cell = document.createElement("div");
             cell.classList.add("celula");
 
-            if (board[i][j] === NAVIO && !esconder) cell.classList.add("navio");
             if (board[i][j] === 2) cell.classList.add("hit");
             if (board[i][j] === 3) cell.classList.add("miss");
 
@@ -17,10 +24,7 @@ function render(board, el, esconder=false) {
                 atacar(enemyBoard, i, j, true);
                 atualizar();
 
-                setTimeout(() => {
-                    turnoIA();
-                    atualizar();
-                }, 600);
+                setTimeout(() => turnoIA(), 600);
             };
 
             el.appendChild(cell);
@@ -31,12 +35,34 @@ function render(board, el, esconder=false) {
 function atualizar() {
     render(playerBoard, document.getElementById("playerBoard"));
     render(enemyBoard, document.getElementById("enemyBoard"), true);
+    verificarFim();
+}
+
+function verificarFim() {
+    let player = contarRestantes(playerBoard);
+    let enemy = contarRestantes(enemyBoard);
+
+    if (enemy === 0) {
+        document.getElementById("status").textContent = "👑 Vitória!";
+        turno = false;
+    }
+
+    if (player === 0) {
+        document.getElementById("status").textContent = "💀 Derrota...";
+        turno = false;
+    }
 }
 
 function log(msg) {
     let li = document.createElement("li");
     li.textContent = msg;
     document.getElementById("logList").appendChild(li);
+}
+
+function toggleSom() {
+    somLigado = !somLigado;
+    if (!somLigado) audioBg.pause();
+    else audioBg.play();
 }
 
 function reiniciarJogo() {
@@ -47,12 +73,10 @@ function reiniciarJogo() {
     gerarNavios(enemyBoard);
 
     turno = true;
-    alvoIA = null;
     jogadasIA.clear();
 
     document.getElementById("logList").innerHTML = "";
+    document.getElementById("status").textContent = "👑 Seu turno";
 
     atualizar();
 }
-
-reiniciarJogo();

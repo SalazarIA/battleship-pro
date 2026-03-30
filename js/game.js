@@ -4,8 +4,16 @@ const TAM_NAVIO = 3;
 
 let playerBoard, enemyBoard;
 let turno = true;
-let alvoIA = null;
 let jogadasIA = new Set();
+
+let somLigado = true;
+
+const audioHit = new Audio("assets/hit.mp3");
+const audioMiss = new Audio("assets/miss.mp3");
+const audioBg = new Audio("assets/bg.mp3");
+audioBg.loop = true;
+
+// =======================
 
 function criarTabuleiro() {
     return Array.from({ length: TAM }, () => Array(TAM).fill(0));
@@ -49,13 +57,12 @@ function atacar(board, i, j, isPlayer=true) {
 
     if (board[i][j] === NAVIO) {
         board[i][j] = 2;
-        log(`${isPlayer ? "Você" : "IA"} acertou (${i},${j})`);
-
-        if (!isPlayer) alvoIA = [i,j];
-
+        if (somLigado) audioHit.play();
+        log(`${isPlayer ? "👑 Ataque certeiro!" : "⚔️ Inimigo acertou!"}`);
     } else {
         board[i][j] = 3;
-        log(`${isPlayer ? "Você" : "IA"} errou (${i},${j})`);
+        if (somLigado) audioMiss.play();
+        log(`${isPlayer ? "🌊 Água..." : "🌫️ Inimigo errou"}`);
         turno = isPlayer ? false : true;
     }
 }
@@ -77,4 +84,16 @@ function turnoIA() {
     } else {
         turno = true;
     }
+
+    atualizar();
+}
+
+function contarRestantes(board) {
+    let total = 0;
+    for (let i=0;i<TAM;i++){
+        for (let j=0;j<TAM;j++){
+            if (board[i][j] === NAVIO) total++;
+        }
+    }
+    return total;
 }
