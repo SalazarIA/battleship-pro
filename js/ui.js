@@ -1,82 +1,87 @@
-function iniciarJogo() {
+function iniciarJogo(){
     document.getElementById("menu").classList.add("hidden");
     document.getElementById("game").classList.remove("hidden");
-
-    audioBg.play();
+    bg.play().catch(()=>{});
     reiniciarJogo();
 }
 
-function render(board, el, esconder=false) {
-    el.innerHTML = "";
+function efeito(tipo, el){
+    let e=document.createElement("div");
+    e.className=tipo;
+    let r=el.getBoundingClientRect();
+    e.style.left=r.left+"px";
+    e.style.top=r.top+"px";
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),500);
+}
 
-    for (let i=0;i<10;i++){
-        for (let j=0;j<10;j++){
+function render(b,el,hide=false){
+    el.innerHTML="";
+    for(let i=0;i<10;i++){
+        for(let j=0;j<10;j++){
+            let c=document.createElement("div");
+            c.classList.add("celula");
 
-            let cell = document.createElement("div");
-            cell.classList.add("celula");
+            if(b[i][j]==NAVIO&&!hide) c.classList.add("navio");
+            if(b[i][j]==2) c.classList.add("hit");
+            if(b[i][j]==3) c.classList.add("miss");
 
-            if (board[i][j] === 2) cell.classList.add("hit");
-            if (board[i][j] === 3) cell.classList.add("miss");
+            c.onclick=()=>{
+                if(!turno||!hide) return;
 
-            cell.onclick = () => {
-                if (!turno || esconder === false) return;
-
-                atacar(enemyBoard, i, j, true);
+                let before=b[i][j];
+                atacar(enemyBoard,i,j,true);
                 atualizar();
 
-                setTimeout(() => turnoIA(), 600);
+                efeito(before==NAVIO?"explosion":"splash",c);
+                setTimeout(turnoIA,600);
             };
 
-            el.appendChild(cell);
+            el.appendChild(c);
         }
     }
 }
 
-function atualizar() {
-    render(playerBoard, document.getElementById("playerBoard"));
-    render(enemyBoard, document.getElementById("enemyBoard"), true);
-    verificarFim();
+function atualizar(){
+    render(playerBoard,playerBoardEl);
+    render(enemyBoard,enemyBoardEl,true);
+    fim();
 }
 
-function verificarFim() {
-    let player = contarRestantes(playerBoard);
-    let enemy = contarRestantes(enemyBoard);
-
-    if (enemy === 0) {
-        document.getElementById("status").textContent = "👑 Vitória!";
-        turno = false;
+function fim(){
+    if(contarRestantes(enemyBoard)==0){
+        tela("👑 VITÓRIA");
     }
-
-    if (player === 0) {
-        document.getElementById("status").textContent = "💀 Derrota...";
-        turno = false;
+    if(contarRestantes(playerBoard)==0){
+        tela("💀 DERROTA");
     }
 }
 
-function log(msg) {
-    let li = document.createElement("li");
-    li.textContent = msg;
-    document.getElementById("logList").appendChild(li);
+function tela(txt){
+    let t=document.createElement("div");
+    t.className="end";
+    t.textContent=txt;
+    document.body.appendChild(t);
 }
 
-function toggleSom() {
-    somLigado = !somLigado;
-    if (!somLigado) audioBg.pause();
-    else audioBg.play();
+function toggleSom(){
+    somLigado=!somLigado;
+    if(!somLigado) bg.pause();
+    else bg.play().catch(()=>{});
 }
 
-function reiniciarJogo() {
-    playerBoard = criarTabuleiro();
-    enemyBoard = criarTabuleiro();
+function reiniciarJogo(){
+    playerBoard=criarTabuleiro();
+    enemyBoard=criarTabuleiro();
 
     gerarNavios(playerBoard);
     gerarNavios(enemyBoard);
 
-    turno = true;
+    turno=true;
     jogadasIA.clear();
-
-    document.getElementById("logList").innerHTML = "";
-    document.getElementById("status").textContent = "👑 Seu turno";
 
     atualizar();
 }
+
+const playerBoardEl=document.getElementById("playerBoard");
+const enemyBoardEl=document.getElementById("enemyBoard");
